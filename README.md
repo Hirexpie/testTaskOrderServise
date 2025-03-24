@@ -46,6 +46,7 @@ docker-compose logs -f                   # Просмотр логов
 - Создана база данных.
 ### запусти следующие команды:
 ```
+npm install
 npm run build
 npm run start
 ```
