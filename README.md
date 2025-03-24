@@ -7,12 +7,12 @@
 
 ### Клонирование репозитория
 ```sh
-git clone <URL-РЕПОЗИТОРИЯ>
-cd <ИМЯ-ПРОЕКТА>
+git clone https://github.com/Hirexpie/testTaskOrderServise.git
+cd testTaskOrderServise
 ```
 
 ### Создание файла окружения
-Создай файл `.env` в корне проекта и добавь:
+Создайте файл `.env` в корне проекта и добавьте:
 ```env
 PORT=3000
 DB_HOST=nest_postgres
@@ -22,38 +22,37 @@ DB_PASSWORD=12345678
 DB_NAME=my_db
 ```
 
-желательно ```DB_HOST``` остваить как ```nest_postgres```
+Если запускаете через `Docker`, оставьте `DB_HOST=nest_postgres`.  
+Если локально — измените `DB_HOST=localhost`.
+
 ### Запуск через Docker
 ```sh
 docker-compose up --build -d
 ```
+
 ## Полезные команды
-Остановить контейнеры:
 ```sh
-docker-compose down
+docker-compose down                     # Остановить контейнеры
+docker-compose down -v && docker-compose up --build -d  # Перезапуск с очисткой БД
+docker-compose logs -f                   # Просмотр логов
 ```
 
-Перезапустить с очисткой БД:
-```sh
-docker-compose down -v && docker-compose up --build -d
-```
+---
 
-Просмотр логов:
-```sh
-docker-compose logs -f
-```
-
-## 
-
-
-
+## Запуск в режиме разработки
+### Требования:
+- Локальная база данных запущена на нужном порту.
+- Существует пользователь с заданным паролем.
+- Создана база данных.
 
 ## API Endpoints
-| Метод | URL | Описание |
-|-------|-----|----------|
-| GET | `/orders` | Получить заказы |
-### ответ:
+
+### Получить заказы
+```http
+GET /orders
 ```
+#### Ответ:
+```json
 {
 	"orders": [
 		{
@@ -63,60 +62,57 @@ docker-compose logs -f
 			"status": "В обработке",
 			"createdAt": "2025-03-24T17:37:02.914Z",
 			"updatedAt": "2025-03-24T17:37:02.914Z"
-		},
-		{
-			"id": "8e4bf039-36c3-4c09-a126-31bf9b83ae4b",
-			"itemName": "Книга",
-			"address": "пр. Мира 5",
-			"status": "В обработке",
-			"createdAt": "2025-03-24T17:37:16.678Z",
-			"updatedAt": "2025-03-24T17:37:16.678Z"
 		}
 	],
-	"total": 2,
+	"total": 1,
 	"page": 1,
 	"limit": 100,
 	"totalPages": 1
 }
-``` 
-имеет пагинацию в виде страниц
-
-| Метод | URL | Описание |
-|-------|-----|----------|
-| POST | `/orders` | Создать заказ |
-### тело запроса:
 ```
+
+---
+
+### Создать заказ
+```http
+POST /orders
+```
+#### Тело запроса:
+```json
 {
   "itemName": "Книга",
-  "address": "В обработке",
-  "status": "В обработке" // не обизательно
+  "address": "ул. Пушкина 12",
+  "status": "В обработке"
 }
 ```
-## ответ:
-
-```
+#### Ответ:
+```json
 {
-	"message": "заказ создан",
+	"message": "Заказ создан",
 	"order": {
 		"id": "8e4bf039-36c3-4c09-a126-31bf9b83ae4b",
 		"itemName": "Книга",
-		"address": "В обработке",
+		"address": "ул. Пушкина 12",
 		"status": "В обработке",
 		"createdAt": "2025-03-24T17:59:10.265Z",
 		"updatedAt": "2025-03-24T17:59:10.265Z"
 	}
 }
 ```
-| Метод | URL | Описание |
-|-------|-----|----------|
-| GET | `/orders/:id` | Получить заказ |
-### ответ:
+
+---
+
+### Получить заказ по ID
+```http
+GET /orders/:id
 ```
+#### Ответ:
+```json
 {
 	"order": {
 		"id": "8e4bf039-36c3-4c09-a126-31bf9b83ae4b",
 		"itemName": "Книга",
-		"address": "В обработке",
+		"address": "ул. Пушкина 12",
 		"status": "В обработке",
 		"createdAt": "2025-03-24T17:59:10.265Z",
 		"updatedAt": "2025-03-24T17:59:10.265Z"
